@@ -1,11 +1,11 @@
 export enum TrackingState {
-    Unchanged,
-    Added,
-    Modified,
-    Deleted
+    Unchanged = 0,
+    Added = 1,
+    Modified = 2,
+    Deleted = 3
 }
 
 export interface TrackableEntity {
     trackingState: TrackingState;
-    modifiedProperties?: string[];
+    modifiedProperties: string[];
 }
