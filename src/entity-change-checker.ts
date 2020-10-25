@@ -25,25 +25,21 @@ export class EntityChangeChecker {
         return this.detectObjectChanges(obj, sourceObj, dirtyOnly);
     }
 
-    private detectObjectChanges(
-        obj: Record<string, unknown>,
-        sourceObj: Record<string, unknown>,
-        dirtyOnly: boolean
-    ): boolean {
-        const isTrackableEntity = ((obj as unknown) as TrackableEntity).trackingState != null;
+    private detectObjectChanges(obj: unknown, sourceObj: unknown, dirtyOnly: boolean): boolean {
+        const isTrackableEntity = (obj as TrackableEntity).trackingState != null;
 
         if (
             isTrackableEntity &&
             !dirtyOnly &&
-            (((obj as unknown) as TrackableEntity).trackingState === TrackingState.Added ||
-                ((obj as unknown) as TrackableEntity).trackingState === TrackingState.Deleted)
+            ((obj as TrackableEntity).trackingState === TrackingState.Added ||
+                (obj as TrackableEntity).trackingState === TrackingState.Deleted)
         ) {
             return true;
         }
 
         if (sourceObj == null) {
             if (isTrackableEntity && !dirtyOnly) {
-                ((obj as unknown) as TrackableEntity).trackingState = TrackingState.Added;
+                (obj as TrackableEntity).trackingState = TrackingState.Added;
             }
 
             return true;
@@ -51,7 +47,7 @@ export class EntityChangeChecker {
 
         let hasAnychanges = false;
 
-        for (const key in obj) {
+        for (const key in obj as Record<string, unknown>) {
             if (!Object.prototype.hasOwnProperty.call(obj, key)) {
                 continue;
             }
@@ -60,8 +56,8 @@ export class EntityChangeChecker {
                 continue;
             }
 
-            const objValue = (obj as { [key: string]: unknown })[key];
-            const sourceObjValue = (sourceObj as { [key: string]: unknown })[key];
+            const objValue = (obj as Record<string, unknown>)[key];
+            const sourceObjValue = (sourceObj as Record<string, unknown>)[key];
 
             if (isSampleValue(objValue) || isSampleValue(sourceObjValue)) {
                 if (!this.equalSampleValues(objValue, sourceObjValue)) {
@@ -72,8 +68,9 @@ export class EntityChangeChecker {
                     }
 
                     if (isTrackableEntity && !dirtyOnly) {
-                        ((obj as unknown) as TrackableEntity).modifiedProperties.push(key);
-                        ((obj as unknown) as TrackableEntity).trackingState = TrackingState.Modified;
+                        (obj as TrackableEntity).modifiedProperties = (obj as TrackableEntity).modifiedProperties || [];
+                        (obj as TrackableEntity).modifiedProperties.push(key);
+                        (obj as TrackableEntity).trackingState = TrackingState.Modified;
                     }
                 }
 
@@ -93,6 +90,7 @@ export class EntityChangeChecker {
                     }
 
                     if (isTrackableEntity && !dirtyOnly) {
+                        (obj as TrackableEntity).modifiedProperties = (obj as TrackableEntity).modifiedProperties || [];
                         (obj as TrackableEntity).modifiedProperties.push(key);
                         (obj as TrackableEntity).trackingState = TrackingState.Modified;
                     }
@@ -114,6 +112,7 @@ export class EntityChangeChecker {
                     }
 
                     if (isTrackableEntity && !dirtyOnly) {
+                        (obj as TrackableEntity).modifiedProperties = (obj as TrackableEntity).modifiedProperties || [];
                         (obj as TrackableEntity).modifiedProperties.push(key);
                         (obj as TrackableEntity).trackingState = TrackingState.Modified;
                     }
@@ -142,7 +141,7 @@ export class EntityChangeChecker {
 
         for (let i = value.length - 1; i >= 0; i--) {
             const item = value[i];
-            const surceItem = sourceValueLength > i ? sourceValue[i] : null;
+            const surceItem = sourceValueLength > i ? (sourceValue[i] as unknown) : null;
 
             if (this.detectValueChanges(item, surceItem, dirtyOnly)) {
                 hasAnyChanges = true;
