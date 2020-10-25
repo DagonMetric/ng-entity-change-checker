@@ -1,0 +1,55 @@
+{
+  "name": "@dagonmetric/ng-entity-change-checker",
+  "version": "0.0.0",
+  "author": "DagonMetric",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dagonmetric/ng-entity-change-checker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Dagonmetric/ng-entity-change-checker/issues"
+  },
+  "homepage": "https://github.com/Dagonmetric/ng-entity-change-checker",
+  "scripts": {
+    "ng": "ng",
+    "lib": "lib",
+    "lint": "eslint -c .eslintrc.json --ext .js,.ts .",
+    "build": "lib build --env.prod",
+    "test": "lib test --env.ci=true",
+    "e2e": "ng e2e -c=ci",
+    "serve": "ng serve"
+  },
+  "dependencies": {
+    "@angular/common": "^10.2.0",
+    "@angular/core": "^10.2.0",
+    "rxjs": "^6.6.3",
+    "tslib": "~2.0.3"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^0.1002.0",
+    "@angular/cli": "^10.2.0",
+    "@angular/compiler": "^10.2.0",
+    "@angular/compiler-cli": "^10.2.0",
+    "@angular/language-service": "^10.2.0",
+    "@angular/platform-browser": "^10.2.0",
+    "@angular/platform-browser-dynamic": "^10.2.0",
+    "@types/jasmine": "^3.5.14",
+    "@types/jasminewd2": "^2.0.8",
+    "@types/node": "^14.14.2",
+    "@typescript-eslint/eslint-plugin": "^4.5.0",
+    "@typescript-eslint/parser": "^4.5.0",
+    "eslint": "^7.11.0",
+    "eslint-config-prettier": "^6.14.0",
+    "eslint-plugin-jsdoc": "^30.7.3",
+    "eslint-plugin-prettier": "^3.1.4",
+    "jasmine-core": "^3.6.0",
+    "lib-tools": "^1.3.0",
+    "prettier": "^2.1.2",
+    "protractor": "~7.0.0",
+    "ts-node": "^9.0.0",
+    "tsickle": "^0.39.1",
+    "typescript": "~4.0.3",
+    "zone.js": "^0.11.2"
+  }
+}
