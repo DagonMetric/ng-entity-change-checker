@@ -11,6 +11,13 @@
     "url": "https://github.com/Dagonmetric/ng-entity-change-checker/issues"
   },
   "homepage": "https://github.com/Dagonmetric/ng-entity-change-checker",
+  "keywords": [
+    "angular-entity-change-checker",
+    "entity-change-checker",
+    "trackable-entity",
+    "angular",
+    "typescript"
+  ],
   "scripts": {
     "ng": "ng",
     "lib": "lib",
