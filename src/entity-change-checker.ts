@@ -13,24 +13,48 @@ function isDate(value: unknown): boolean {
     return Object.prototype.toString.call(value) === '[object Date]';
 }
 
-function isSampleValue(value: unknown): boolean {
+function isSimpleValue(value: unknown): boolean {
     return !isObject(value) && !Array.isArray(value);
+}
+
+function equalSampleValues(value: unknown, sourceValue: unknown, emptyAndNullAsEqual?: boolean): boolean {
+    if (value === sourceValue) {
+        return true;
+    }
+
+    if (emptyAndNullAsEqual && (value == null || value === '') && (sourceValue == null || sourceValue === '')) {
+        return true;
+    }
+
+    if (isDate(value) && isDate(sourceValue) && (value as Date).getTime() === (sourceValue as Date).getTime()) {
+        return true;
+    }
+
+    // true if both NaN, false otherwise
+    return value !== value && sourceValue !== sourceValue;
+}
+
+const ModifiedPropertiesName = 'modifiedProperties';
+const TrackingStateName = 'trackingState';
+
+export interface EntityCheckingOptions {
+    dirtyOnly?: boolean;
+    emptyAndNullAsEqual?: boolean;
 }
 
 @Injectable({
     providedIn: 'root'
 })
 export class EntityChangeChecker {
-    checkChanges<T extends Record<string, unknown>>(obj: T, sourceObj: T, dirtyOnly = false): boolean {
-        return this.detectObjectChanges(obj, sourceObj, dirtyOnly);
+    checkChanges<T>(obj: T, sourceObj: T, options: EntityCheckingOptions = {}): boolean {
+        return this.detectObjectChanges(obj, sourceObj, options);
     }
 
-    private detectObjectChanges(obj: unknown, sourceObj: unknown, dirtyOnly: boolean): boolean {
+    private detectObjectChanges(obj: unknown, sourceObj: unknown, options: EntityCheckingOptions): boolean {
         const isTrackableEntity = (obj as TrackableEntity).trackingState != null;
 
         if (
             isTrackableEntity &&
-            !dirtyOnly &&
             ((obj as TrackableEntity).trackingState === TrackingState.Added ||
                 (obj as TrackableEntity).trackingState === TrackingState.Deleted)
         ) {
@@ -38,7 +62,7 @@ export class EntityChangeChecker {
         }
 
         if (sourceObj == null) {
-            if (isTrackableEntity && !dirtyOnly) {
+            if (isTrackableEntity && !options.dirtyOnly) {
                 (obj as TrackableEntity).trackingState = TrackingState.Added;
             }
 
@@ -52,22 +76,22 @@ export class EntityChangeChecker {
                 continue;
             }
 
-            if (key === 'modifiedProperties' || key === 'trackingState') {
+            if (key === ModifiedPropertiesName || key === TrackingStateName) {
                 continue;
             }
 
             const objValue = (obj as Record<string, unknown>)[key];
             const sourceObjValue = (sourceObj as Record<string, unknown>)[key];
 
-            if (isSampleValue(objValue) || isSampleValue(sourceObjValue)) {
-                if (!this.equalSampleValues(objValue, sourceObjValue)) {
+            if (isSimpleValue(objValue) || isSimpleValue(sourceObjValue)) {
+                if (!equalSampleValues(objValue, sourceObjValue, options.emptyAndNullAsEqual)) {
                     hasAnychanges = true;
 
-                    if (dirtyOnly) {
+                    if (options.dirtyOnly) {
                         break;
                     }
 
-                    if (isTrackableEntity && !dirtyOnly) {
+                    if (isTrackableEntity && !options.dirtyOnly) {
                         (obj as TrackableEntity).modifiedProperties = (obj as TrackableEntity).modifiedProperties || [];
                         (obj as TrackableEntity).modifiedProperties.push(key);
                         (obj as TrackableEntity).trackingState = TrackingState.Modified;
@@ -81,15 +105,15 @@ export class EntityChangeChecker {
                 if (
                     !objValue ||
                     !Array.isArray(objValue) ||
-                    this.detectArrayValueChanges(objValue, sourceObjValue, dirtyOnly)
+                    this.detectArrayValueChanges(objValue, sourceObjValue, options)
                 ) {
                     hasAnychanges = true;
 
-                    if (dirtyOnly) {
+                    if (options.dirtyOnly) {
                         break;
                     }
 
-                    if (isTrackableEntity && !dirtyOnly) {
+                    if (isTrackableEntity && !options.dirtyOnly) {
                         (obj as TrackableEntity).modifiedProperties = (obj as TrackableEntity).modifiedProperties || [];
                         (obj as TrackableEntity).modifiedProperties.push(key);
                         (obj as TrackableEntity).trackingState = TrackingState.Modified;
@@ -103,15 +127,15 @@ export class EntityChangeChecker {
                 if (
                     !objValue ||
                     typeof objValue !== 'object' ||
-                    this.detectObjectChanges(objValue, sourceObjValue, dirtyOnly)
+                    this.detectObjectChanges(objValue, sourceObjValue, options)
                 ) {
                     hasAnychanges = true;
 
-                    if (dirtyOnly) {
+                    if (options.dirtyOnly) {
                         break;
                     }
 
-                    if (isTrackableEntity && !dirtyOnly) {
+                    if (isTrackableEntity && !options.dirtyOnly) {
                         (obj as TrackableEntity).modifiedProperties = (obj as TrackableEntity).modifiedProperties || [];
                         (obj as TrackableEntity).modifiedProperties.push(key);
                         (obj as TrackableEntity).trackingState = TrackingState.Modified;
@@ -125,7 +149,7 @@ export class EntityChangeChecker {
         return hasAnychanges;
     }
 
-    private detectArrayValueChanges(value: unknown[], sourceValue: unknown, dirtyOnly: boolean): boolean {
+    private detectArrayValueChanges(value: unknown[], sourceValue: unknown, options: EntityCheckingOptions): boolean {
         // TrackingState.Added
         if (!sourceValue || !Array.isArray(sourceValue)) {
             return true;
@@ -135,7 +159,7 @@ export class EntityChangeChecker {
         const sourceValueLength = sourceValue.length;
         let hasAnyChanges = valueLength !== sourceValueLength;
 
-        if (hasAnyChanges && dirtyOnly) {
+        if (hasAnyChanges && options.dirtyOnly) {
             return true;
         }
 
@@ -143,10 +167,10 @@ export class EntityChangeChecker {
             const item = value[i];
             const surceItem = sourceValueLength > i ? (sourceValue[i] as unknown) : null;
 
-            if (this.detectValueChanges(item, surceItem, dirtyOnly)) {
+            if (this.detectValueChanges(item, surceItem, options)) {
                 hasAnyChanges = true;
 
-                if (dirtyOnly) {
+                if (options.dirtyOnly) {
                     break;
                 }
             }
@@ -155,9 +179,9 @@ export class EntityChangeChecker {
         return hasAnyChanges;
     }
 
-    private detectValueChanges(value: unknown, sourceValue: unknown, dirtyOnly: boolean): boolean {
-        if (isSampleValue(value) || isSampleValue(sourceValue)) {
-            return !this.equalSampleValues(value, sourceValue);
+    private detectValueChanges(value: unknown, sourceValue: unknown, options: EntityCheckingOptions): boolean {
+        if (isSimpleValue(value) || isSimpleValue(sourceValue)) {
+            return !equalSampleValues(value, sourceValue, options.emptyAndNullAsEqual);
         }
 
         if (Array.isArray(value) || Array.isArray(sourceValue)) {
@@ -165,7 +189,7 @@ export class EntityChangeChecker {
                 return true;
             }
 
-            return this.detectArrayValueChanges(value, sourceValue, dirtyOnly);
+            return this.detectArrayValueChanges(value, sourceValue, options);
         }
 
         if (isObject(value) || isObject(sourceValue)) {
@@ -173,30 +197,9 @@ export class EntityChangeChecker {
                 return true;
             }
 
-            return this.detectObjectChanges(value, sourceValue, dirtyOnly);
+            return this.detectObjectChanges(value, sourceValue, options);
         }
 
         return false;
-    }
-
-    private equalSampleValues(value: unknown, sourceValue: unknown): boolean {
-        if (value === sourceValue) {
-            return true;
-        }
-
-        if ((value == null || value === '') && (sourceValue == null || sourceValue === '')) {
-            return true;
-        }
-
-        if ((sourceValue == null || sourceValue === '') && (value == null || value === '')) {
-            return true;
-        }
-
-        if (isDate(value) && isDate(sourceValue) && (value as Date).getTime() === (sourceValue as Date).getTime()) {
-            return true;
-        }
-
-        // true if both NaN, false otherwise
-        return value !== value && sourceValue !== sourceValue;
     }
 }
