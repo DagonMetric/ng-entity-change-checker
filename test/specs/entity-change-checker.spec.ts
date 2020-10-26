@@ -55,6 +55,7 @@ describe('EntityChangeChecker', () => {
         void expect(isDirty).toBeTruthy();
     });
 
+    // Simple values
     it('should be dirty when simple values are not the same - string - { dirtyOnly: true }', () => {
         const sourceObj = {
             prop1: 'hello'
@@ -183,5 +184,20 @@ describe('EntityChangeChecker', () => {
         const isDirty = entityChangeChecker.checkChanges(modObj, sourceObj, { dirtyOnly: true });
 
         void expect(isDirty).toBeFalsy();
+    });
+
+    // Array values
+    it('should be dirty when array values are not the same - string - { dirtyOnly: true }', () => {
+        const sourceObj = {
+            prop1: ['a', 'b']
+        };
+
+        const modObj = {
+            prop1: ['b', 'a']
+        };
+
+        const isDirty = entityChangeChecker.checkChanges(modObj, sourceObj, { dirtyOnly: true });
+
+        void expect(isDirty).toBeTruthy();
     });
 });
