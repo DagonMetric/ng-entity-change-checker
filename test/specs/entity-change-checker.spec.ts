@@ -21,7 +21,7 @@ describe('EntityChangeChecker', () => {
             prop4: ['a', 'b'],
             prop5: [],
             prop6: { a: 1, b: '2' },
-            prop7: ''
+            prop7: null
         };
 
         const modObj: Record<string, unknown> = {
@@ -31,7 +31,7 @@ describe('EntityChangeChecker', () => {
             prop4: ['a', 'b'],
             prop5: [],
             prop6: { a: 1, b: '2' },
-            prop7: null
+            prop7: ''
         };
 
         const isDirty = entityChangeChecker.checkChanges(modObj, sourceObj, {
@@ -79,6 +79,23 @@ describe('EntityChangeChecker', () => {
         };
 
         const isDirty = entityChangeChecker.checkChanges(modObj, sourceObj, { dirtyOnly: true });
+
+        void expect(isDirty).toBeFalsy();
+    });
+
+    it('should NOT be dirty when simple values are the same - empty string and null - { dirtyOnly: true, emptyAndNullAsEqual: true }', () => {
+        const sourceObj = {
+            prop1: ''
+        };
+
+        const modObj = {
+            prop1: (null as unknown) as string
+        };
+
+        const isDirty = entityChangeChecker.checkChanges(modObj, sourceObj, {
+            dirtyOnly: true,
+            emptyAndNullAsEqual: true
+        });
 
         void expect(isDirty).toBeFalsy();
     });
