@@ -17,7 +17,7 @@ function isSimpleValue(value: unknown): boolean {
     return !isObject(value) && !Array.isArray(value);
 }
 
-function equalSampleValues(value: unknown, sourceValue: unknown, emptyAndNullAsEqual?: boolean): boolean {
+function equalSimpleValues(value: unknown, sourceValue: unknown, emptyAndNullAsEqual?: boolean): boolean {
     if (value === sourceValue) {
         return true;
     }
@@ -84,7 +84,7 @@ export class EntityChangeChecker {
             const sourceObjValue = (sourceObj as Record<string, unknown>)[key];
 
             if (isSimpleValue(objValue) || isSimpleValue(sourceObjValue)) {
-                if (!equalSampleValues(objValue, sourceObjValue, options.emptyAndNullAsEqual)) {
+                if (!equalSimpleValues(objValue, sourceObjValue, options.emptyAndNullAsEqual)) {
                     hasAnychanges = true;
 
                     if (options.dirtyOnly) {
@@ -181,7 +181,7 @@ export class EntityChangeChecker {
 
     private detectValueChanges(value: unknown, sourceValue: unknown, options: EntityCheckingOptions): boolean {
         if (isSimpleValue(value) || isSimpleValue(sourceValue)) {
-            return !equalSampleValues(value, sourceValue, options.emptyAndNullAsEqual);
+            return !equalSimpleValues(value, sourceValue, options.emptyAndNullAsEqual);
         }
 
         if (Array.isArray(value) || Array.isArray(sourceValue)) {
