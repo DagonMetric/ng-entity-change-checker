@@ -187,13 +187,27 @@ describe('EntityChangeChecker', () => {
     });
 
     // Array values
-    it('should be dirty when array values are not the same - string - { dirtyOnly: true }', () => {
+    it('should be dirty when array values are not the same - equal lengths - { dirtyOnly: true }', () => {
         const sourceObj = {
             prop1: ['a', 'b']
         };
 
         const modObj = {
             prop1: ['b', 'a']
+        };
+
+        const isDirty = entityChangeChecker.checkChanges(modObj, sourceObj, { dirtyOnly: true });
+
+        void expect(isDirty).toBeTruthy();
+    });
+
+    it('should be dirty when array values are not the same - unequal lengths - { dirtyOnly: true }', () => {
+        const sourceObj = {
+            prop1: ['a', 'b']
+        };
+
+        const modObj = {
+            prop1: ['a', 'b', 'c']
         };
 
         const isDirty = entityChangeChecker.checkChanges(modObj, sourceObj, { dirtyOnly: true });
