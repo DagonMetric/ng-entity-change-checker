@@ -214,4 +214,57 @@ describe('EntityChangeChecker', () => {
 
         void expect(isDirty).toBeTruthy();
     });
+
+    it('should NOT be dirty when array values are the same - { dirtyOnly: true }', () => {
+        const sourceObj = {
+            prop1: ['a', 'b', 100, true],
+            prop2: [{ a: [1, 2, 3] }, { b: ['a', 'b', 'c'] }]
+        };
+
+        const modObj = {
+            prop1: ['a', 'b', 100, true],
+            prop2: [{ a: [1, 2, 3] }, { b: ['a', 'b', 'c'] }]
+        };
+
+        const isDirty = entityChangeChecker.checkChanges(modObj, sourceObj, { dirtyOnly: true });
+
+        void expect(isDirty).toBeFalsy();
+    });
+
+    // Object values
+    it('should be dirty when object are not the same { dirtyOnly: true }', () => {
+        const sourceObj = {
+            prop1: {
+                a: 'a'
+            }
+        };
+
+        const modObj = {
+            prop1: {
+                a: 'b'
+            }
+        };
+
+        const isDirty = entityChangeChecker.checkChanges(modObj, sourceObj, { dirtyOnly: true });
+
+        void expect(isDirty).toBeTruthy();
+    });
+
+    it('should NOT be dirty when object arethe same { dirtyOnly: true }', () => {
+        const sourceObj = {
+            prop1: {
+                a: 'a'
+            }
+        };
+
+        const modObj = {
+            prop1: {
+                a: 'a'
+            }
+        };
+
+        const isDirty = entityChangeChecker.checkChanges(modObj, sourceObj, { dirtyOnly: true });
+
+        void expect(isDirty).toBeFalsy();
+    });
 });
