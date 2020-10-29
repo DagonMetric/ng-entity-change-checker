@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { EntityChangeChecker } from '../../src/entity-change-checker';
+import { EntityChangeChecker, TrackableEntity, TrackingState } from '../../src';
 
 describe('EntityChangeChecker', () => {
     let entityChangeChecker: EntityChangeChecker;
@@ -266,5 +266,30 @@ describe('EntityChangeChecker', () => {
         const isDirty = entityChangeChecker.checkChanges(modObj, sourceObj, { dirtyOnly: true });
 
         void expect(isDirty).toBeFalsy();
+    });
+
+    // TrackableEntity
+    it(`should be 'TrackingState.Modified' when object values are modified`, () => {
+        interface MyType extends TrackableEntity {
+            prop1: string;
+            prop2: string;
+        }
+
+        const sourceObj: MyType = {
+            prop1: 'hello',
+            prop2: 'world',
+            trackingState: TrackingState.Unchanged,
+            modifiedProperties: []
+        };
+
+        const modObj = JSON.parse(JSON.stringify(sourceObj)) as MyType;
+        modObj.prop1 = 'my';
+
+        const isDirty = entityChangeChecker.checkChanges(modObj, sourceObj);
+
+        void expect(isDirty).toBeTruthy();
+        void expect(modObj.trackingState).toBe(TrackingState.Modified);
+        void expect(modObj.modifiedProperties.includes('prop1')).toBeTruthy();
+        void expect(!modObj.modifiedProperties.includes('prop2')).toBeTruthy();
     });
 });
