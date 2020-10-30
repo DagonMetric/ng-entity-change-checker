@@ -273,23 +273,28 @@ describe('EntityChangeChecker', () => {
         interface MyType extends TrackableEntity {
             prop1: string;
             prop2: string;
+            prop3: number;
+            prop4: boolean;
         }
 
         const sourceObj: MyType = {
             prop1: 'hello',
             prop2: 'world',
+            prop3: 100,
+            prop4: true,
             trackingState: TrackingState.Unchanged,
             modifiedProperties: []
         };
 
         const modObj = JSON.parse(JSON.stringify(sourceObj)) as MyType;
         modObj.prop1 = 'my';
+        modObj.prop3 = 200;
+        modObj.prop4 = false;
 
         const isDirty = entityChangeChecker.checkChanges(modObj, sourceObj);
 
         void expect(isDirty).toBeTruthy();
         void expect(modObj.trackingState).toBe(TrackingState.Modified);
-        void expect(modObj.modifiedProperties.includes('prop1')).toBeTruthy();
-        void expect(!modObj.modifiedProperties.includes('prop2')).toBeTruthy();
+        void expect(modObj.modifiedProperties).toEqual(['prop1', 'prop3', 'prop4']);
     });
 });
