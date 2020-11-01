@@ -60,5 +60,9 @@
     "tsickle": "^0.39.1",
     "typescript": "~4.0.5",
     "zone.js": "^0.11.2"
-  }
+  },
+  "peerDependencies": {    
+    "@angular/core": "^8.0.0-beta.0 || ^9.0.0-rc.0 || ^10.0.0-rc.0"
+  },
+  "sideEffects": false
 }
