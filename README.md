@@ -1,5 +1,7 @@
 # Entity Change Checker
 
+[![GitHub Actions Status](https://github.com/DagonMetric/ng-entity-change-checker/workflows/Main%20Workflow/badge.svg)](https://github.com/DagonMetric/ng-entity-change-checker/actions)
+
 Dirty checker api for two objects and it also detects for tracking states (such as Added, Modified or Deleted) and modified properties of trackable entities.
 
 ## Get Started
