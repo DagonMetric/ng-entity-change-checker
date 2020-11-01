@@ -23,12 +23,5 @@ jobs:
         npm run lint --if-present
         npm run build        
         npm run test --if-present
-        npm run e2e --if-present
-    - uses: codecov/codecov-action@v1
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./coverage/ng-entity-change-checker/lcov.info
-        flags: unit
-        # fail_ci_if_error: true #optional (default = false)
       env:
         CI: true
