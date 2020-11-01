@@ -274,14 +274,49 @@ describe('EntityChangeChecker', () => {
             prop1: string;
             prop2: string;
             prop3: number;
-            prop4: boolean;
+            prop4: number;
+            prop5: boolean;
+            prop6: boolean;
+            prop7: Record<string, unknown>;
+            prop8: Record<string, unknown>;
+            prop9: unknown[];
+            prop10: unknown[];
         }
 
         const sourceObj: MyType = {
             prop1: 'hello',
             prop2: 'world',
             prop3: 100,
-            prop4: true,
+            prop4: 500,
+            prop5: false,
+            prop6: true,
+            prop7: {
+                a: 'hello',
+                b: 100,
+                c: true
+            },
+            prop8: {
+                a: 'hello',
+                b: 500,
+                c: false
+            },
+            prop9: [
+                'hello',
+                100,
+                {
+                    a: 1,
+                    b: '2'
+                }
+            ],
+            prop10: [
+                'hello',
+                500,
+                true,
+                {
+                    a: 1,
+                    b: '2'
+                }
+            ],
             trackingState: TrackingState.Unchanged,
             modifiedProperties: []
         };
@@ -289,12 +324,25 @@ describe('EntityChangeChecker', () => {
         const modObj = JSON.parse(JSON.stringify(sourceObj)) as MyType;
         modObj.prop1 = 'my';
         modObj.prop3 = 200;
-        modObj.prop4 = false;
+        modObj.prop5 = true;
+        modObj.prop7 = {
+            a: 'hello',
+            b: 200,
+            c: true
+        };
+        modObj.prop9 = [
+            'hello',
+            100,
+            {
+                a: 2,
+                b: '2'
+            }
+        ];
 
         const isDirty = entityChangeChecker.checkChanges(modObj, sourceObj);
 
         void expect(isDirty).toBeTruthy();
         void expect(modObj.trackingState).toBe(TrackingState.Modified);
-        void expect(modObj.modifiedProperties).toEqual(['prop1', 'prop3', 'prop4']);
+        void expect(modObj.modifiedProperties).toEqual(['prop1', 'prop3', 'prop5', 'prop7', 'prop9']);
     });
 });
