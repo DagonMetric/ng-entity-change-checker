@@ -5,4 +5,4 @@ import { EntityChangeChecker } from './entity-change-checker';
 @NgModule({
     providers: [EntityChangeChecker]
 })
-export class TrackableEntityModule {}
+export class EntityChangeCheckerModule {}
