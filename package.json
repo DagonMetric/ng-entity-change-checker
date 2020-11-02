@@ -25,8 +25,7 @@
     "lib": "lib",
     "lint": "eslint -c .eslintrc.json --ext .js,.ts .",
     "build": "lib build --env.prod",
-    "test": "lib test --env.ci",
-    "e2e": "ng e2e -c=ci",
+    "test": "lib test --env.ci",    
     "serve": "ng serve"
   },
   "dependencies": {
