@@ -3,7 +3,7 @@
 [![Azure Pipelines Status](https://dev.azure.com/DagonMetric/ng-entity-change-checker/_apis/build/status/DagonMetric.ng-entity-change-checker?repoName=DagonMetric%2Fng-entity-change-checker&branchName=main)](https://dev.azure.com/DagonMetric/ng-entity-change-checker/_build/latest?definitionId=25&repoName=DagonMetric%2Fng-entity-change-checker&branchName=main)
 [![GitHub Actions Status](https://github.com/DagonMetric/ng-entity-change-checker/workflows/Main%20Workflow/badge.svg)](https://github.com/DagonMetric/ng-entity-change-checker/actions)
 
-Dirty checker API and entity change states (such as Added, Modified or Deleted) and modified properties detector service for Angular applications.
+Object dirty checker and change states (such as Added, Modified or Deleted) and modified properties detector service for Angular applications.
 
 ## Get Started
 
