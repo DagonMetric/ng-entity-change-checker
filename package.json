@@ -1,6 +1,6 @@
 {
   "name": "@dagonmetric/ng-entity-change-checker",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Object dirty checker and change states (such as Added, Modified or Deleted) and modified properties detector service for Angular applications.",
   "author": "DagonMetric",
   "license": "MIT",
