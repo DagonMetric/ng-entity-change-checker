@@ -1,7 +1,7 @@
 {
   "name": "@dagonmetric/ng-entity-change-checker",
   "version": "0.0.0",
-  "description": "Dirty checker API and entity change states (such as Added, Modified or Deleted) and modified properties detector service for Angular applications.",
+  "description": "Object dirty checker and change states (such as Added, Modified or Deleted) and modified properties detector service for Angular applications.",
   "author": "DagonMetric",
   "license": "MIT",
   "repository": {
@@ -14,8 +14,7 @@
   "homepage": "https://github.com/Dagonmetric/ng-entity-change-checker",
   "keywords": [
     "angular-entity-change-checker",
-    "entity-change-checker",
-    "trackable-entity",
+    "entity-change-checker",    
     "trackable-entities",
     "angular",
     "typescript"
