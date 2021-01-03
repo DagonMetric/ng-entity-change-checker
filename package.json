@@ -24,7 +24,7 @@
     "lib": "lib",
     "lint": "eslint -c .eslintrc.json --ext .js,.ts .",
     "build": "lib build --env.prod",
-    "test": "lib test --env.ci",
+    "test": "ng test -c=ci",
     "serve": "ng serve"
   },
   "dependencies": {
@@ -60,7 +60,7 @@
     "zone.js": "^0.11.3"
   },
   "peerDependencies": {
-    "@angular/core": "^11.0.5"
+    "@angular/core": "^8.0.0-beta.0 || ^9.0.0-rc.0 || ^10.0.0-rc.0 || ^11.0.0-rc.0"
   },
   "sideEffects": false
 }
