@@ -4,16 +4,16 @@
   "newProjectRoot": "samples",
   "projects": {
     "ng-entity-change-checker": {
-      "root": ".",
-      "sourceRoot": ".",
+      "root": "modules/ng-entity-change-checker",
+      "sourceRoot": "modules/ng-entity-change-checker",
       "projectType": "library",
       "architect": {        
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "test.ts",
-            "tsConfig": "tsconfig.test.json",
-            "karmaConfig": "karma.conf.js",
+            "main": "modules/ng-entity-change-checker/test.ts",
+            "tsConfig": "modules/ng-entity-change-checker/tsconfig.test.json",
+            "karmaConfig": "modules/ng-entity-change-checker/karma.conf.js",
             "codeCoverageExclude": [
               "**/test.ts",
               "**/index.ts",
