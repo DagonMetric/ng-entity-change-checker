@@ -1,4 +1,4 @@
-## Features
+## Changes
 
 * Update package dependencies
 
