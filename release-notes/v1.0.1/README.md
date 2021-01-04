@@ -1,5 +1,7 @@
 ## Features
 
+* Update package dependencies
+
 npm packages are available on:
 
 * [@dagonmetric/ng-entity-change-checker - npm registry](https://www.npmjs.com/package/@dagonmetric/ng-entity-change-checker)
