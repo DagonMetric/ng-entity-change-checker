@@ -1,7 +1,6 @@
 {
-  "name": "@dagonmetric/ng-entity-change-checker",
+  "name": "ng-entity-change-checker",
   "version": "1.0.0",
-  "description": "Object dirty checker and change states (such as Added, Modified or Deleted) and modified properties detector service for Angular applications.",
   "author": "DagonMetric",
   "license": "MIT",
   "repository": {
@@ -12,13 +11,6 @@
     "url": "https://github.com/Dagonmetric/ng-entity-change-checker/issues"
   },
   "homepage": "https://github.com/Dagonmetric/ng-entity-change-checker",
-  "keywords": [
-    "angular-entity-change-checker",
-    "entity-change-checker",
-    "trackable-entities",
-    "angular",
-    "typescript"
-  ],
   "scripts": {
     "ng": "ng",
     "lib": "lib",
@@ -29,7 +21,7 @@
   },
   "dependencies": {
     "@angular/common": "^11.0.5",
-    "@angular/core": "^10.2.1",
+    "@angular/core": "^11.0.5",
     "rxjs": "^6.6.3",
     "tslib": "~2.0.3"
   },
@@ -58,9 +50,5 @@
     "tsickle": "^0.39.1",
     "typescript": "4.0.5",
     "zone.js": "^0.11.3"
-  },
-  "peerDependencies": {
-    "@angular/core": "^8.0.0-beta.0 || ^9.0.0-rc.0 || ^10.0.0-rc.0 || ^11.0.0-rc.0"
-  },
-  "sideEffects": false
+  }
 }
