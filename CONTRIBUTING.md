@@ -8,7 +8,7 @@ We use [Github issues](https://github.com/dagonmetric/ng-entity-change-checker/i
 
 ## General Discussions
 
-We use [Gitter Channel](https://gitter.im/DagonMetric/general) for general DagonMetric's open source products discussion.
+We use [Github Discussions Channel](https://github.com/DagonMetric/ng-entity-change-checker/discussions) for general discussions.
 
 ## Contributing code and content
 
